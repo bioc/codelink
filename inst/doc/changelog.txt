@@ -364,3 +364,6 @@ that column.
 
 1.2.1
   - FIX read of files without "Logical_row" and "Logical_col" fields.
+
+1.2.2
+  - Changed example dataset to FIX vignette.
