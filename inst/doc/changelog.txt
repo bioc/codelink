@@ -676,3 +676,9 @@
   read.AnnotatedDataFrame().
 1.7.6
   - added phenodata and feature data arguments to readCodelink2().
+
+1.8.0
+  - bioc 2.2 release.
+
+1.8.1
+  - fixed high intensity probes turn NA by loess normalization.

@@ -95,7 +95,7 @@ normalize.loess <- function (mat,
 				ww <- ww[index]
 
                 aux <- loess(yy ~ xx, span = span, degree = 1, 
-                  weights = ww, family = family.loess)
+                  weights = ww, family = family.loess, control = loess.control(surface = "direct"))
                 aux <- predict(aux, data.frame(xx = x))/J
 				# apply normalization to genes not NA.
                 means[sel, j] <- means[sel, j] + aux
