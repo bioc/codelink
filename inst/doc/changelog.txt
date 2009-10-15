@@ -706,3 +706,7 @@
   - new wrapper function readCodelinkSet().
   - fixed writecluster symbol retrieval problem (now using lookUp from
   annotate package).
+  
+1.12.1
+  - fixed bug in codCorrect() that would prevent the methods "half" and "subtract"
+    for being available. Thanks to Frédéric Boyer for reporting this.
