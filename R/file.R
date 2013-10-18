@@ -396,7 +396,7 @@ readCodelink <- function(files=list.files(pattern = "TXT"), sample.name=NULL, fl
 		cat("OK\n")
 	} else {
 		cat("** applying flags to MSR spots ...")
-		for(k in names(flag.cc)) {
+		for(k in names(flag.cc.new)) {
 			sel <- grep(k, codelink$flag)
 			codelink$Smean[sel] <- flag.cc.new[[k]]
 			codelink$Bmedian[sel] <- flag.cc.new[[k]]
@@ -471,42 +471,89 @@ writeCodelink <- function(object, file, dec = ".", sep = "\t", flag = FALSE, chi
 # }
 # setGeneric("assignWeights")
 
-createWeights = function(object,type.weights=NULL,flag.weights=NULL) {
+setGeneric("createWeights", function(object,type.weights=NULL,flag.weights=NULL) standardGeneric("createWeights"))
+setMethod("createWeights", "CodelinkSet",
+function(object,type.weights=NULL,flag.weights=NULL) {
 	w=createTypeWeights(object,type.weights)
-	createFlagWeights(object,flag.weights,w=w)
-}
+	createFlagWeights(object,flag.weights,weights=w)
+})
+setMethod("createWeights", "Codelink",
+function(object,type.weights=NULL,flag.weights=NULL) {
+  w=createTypeWeights(object,type.weights)
+  createFlagWeights(object,flag.weights,weights=w)
+})
 
-createFlagWeights=function(object,flag.weights=NULL,w) {
-	if(missing(w)) {
+
+setGeneric("createFlagWeights", function(object,flag.weights=NULL,weights) standardGeneric("createFlagWeights"))
+setMethod("createFlagWeights", "CodelinkSet",
+function(object,flag.weights=NULL,weights) {
+	if(missing(weights)) {
 		w = array(1,dim(object))
 		colnames(w)=sampleNames(object)
 		rownames(w)=featureNames(object)	
-	}
+	} else w = weights
 	if(is.null(flag.weights))
 		flag.weights = c("G"=1,"L"=1,"S"=1,"C"=0,"I"=0,"M"=0,"X"=0)
 	for(k in names(flag.weights)) {
-		sel=grep(k,object$flag)
+		sel=grep(k,getFlag(object))
 		# keep the lowest weight.
 		w[sel][w[sel]>flag.weights[k]]=flag.weights[k]
 	}
 	w
-}
+})
 
-createTypeWeights=function(object,type.weights=NULL,w) {
-	if(missing(w)) {
+setMethod("createFlagWeights", "Codelink",
+function(object,flag.weights=NULL,weights) {
+  if(missing(weights)) {
+  	w = array(1,dim(object))
+  	colnames(w)=colnames(object$Bmedian)
+  	rownames(w)=rownames(object$Bmedian)
+  } else w = weights
+  if(is.null(flag.weights))
+  	flag.weights = c("G"=1,"L"=1,"S"=1,"C"=0,"I"=0,"M"=0,"X"=0)
+  for(k in names(flag.weights)) {
+  	sel=grep(k,object$flag)
+  	# keep the lowest weight.
+  	w[sel][w[sel]>flag.weights[k]]=flag.weights[k]
+  }
+  w
+})
+
+setGeneric("createTypeWeights", function(object,type.weights=NULL,weights) standardGeneric("createTypeWeights"))
+setMethod("createTypeWeights","CodelinkSet",
+function(object,type.weights=NULL,weights) {
+	if(missing(weights)) {
 		w = array(1,dim(object))
 		colnames(w)=sampleNames(object)
 		rownames(w)=featureNames(object)	
-	}
+	} else w = weights
 	if(is.null(type.weights))
 		type.weights = c("DISCOVERY"=1,"FIDUCIAL"=0,"POSITIVE"=0,"NEGATIVE"=0, "OTHER"=0)
 	for(k in names(type.weights)) {
-		sel=grep(k,object$type)
+		sel=grep(k,probeTypes(object))
 		# keep the lowest weight.
 		w[sel,][w[sel,]>type.weights[k]]=type.weights[k]
 	}
 	w
-}
+})
+
+setMethod("createTypeWeights","Codelink",
+function(object,type.weights=NULL,weights) {
+  if(missing(weights)) {
+  	w = array(1,dim(object))
+  	colnames(w)=colnames(object$Bmedian)
+  	rownames(w)=rownames(object$Bmedian)
+  } else w = weights
+  if(is.null(type.weights))
+  	type.weights = c("DISCOVERY"=1,"FIDUCIAL"=0,"POSITIVE"=0,"NEGATIVE"=0, "OTHER"=0)
+  for(k in names(type.weights)) {
+  	sel=grep(k,object$type)
+  	# keep the lowest weight.
+  	w[sel,][w[sel,]>type.weights[k]]=type.weights[k]
+  }
+  w
+})
+
 
 
 # reportCodelink()
