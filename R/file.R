@@ -79,11 +79,12 @@ checkColumns <- function(x, y)
 # read of codelink data.
 readCodelink <- function(files=list.files(pattern = "TXT"), sample.name=NULL, flag, flag.weights, type.weights, dec=NULL, type="Spot", preserve=FALSE,	verbose=2, file.type="Codelink", check=TRUE, fix=FALSE, old=FALSE)
 {
+	.Deprecated(msg="The Codelink interface is deprecated. Read Codelink data with 'readCodelinkSet' instead. More details in the vignette and documentation.")
 	if(length(files) == 0) stop("no Codelink files found.")
 	if(!old)
-		message("readCodelink()/readCodelinkSet() does not convert intensities in NA based on flags anymore, except for spots flagged as 'M' (MSR spot). Instead, use createWeights() assign weights to spots during normalization and linear modeling. To obtain the old behavior call readCodelink()/readCodelinkSet() with 'old=TRUE'.")
+		warning("'readCodelink' and 'readCodelinkSet' do not convert intensities to NA based on flags anymore, except for spots flagged as 'M' (MSR spot). Instead, createWeights() is used to assign weights. These weights can be used during normalization and linear modeling. To obtain the old behavior use parameter 'old=TRUE' (weights will be created anyway).")
 	if(old)
-		message("calling readCodelink()/readCodelinkSet() with 'old=TRUE'")
+		warning("calling 'readCodelink'/'readCodelinkSet' with 'old=TRUE'")
 	
 	nslides <- length(files)
 

@@ -51,6 +51,8 @@ mergeArray <- function(object, class, names=NULL, method="mean",
 # Correct Spot intensity by background.
 bkgdCorrect <- function(object, method = "half", preserve = FALSE,
                         verbose = FALSE, offset = 0) {
+	.Deprecated(msg="The Codelink interface is deprecated. Read Codelink data with 'readCodelinkSet' instead. More details in the vignette and documentation.")
+	
 	if(!is(object,"Codelink")) stop("Codelink object needed.")
 	method <- match.arg(method, c("none", "subtract", "half", "normexp"))
 	
