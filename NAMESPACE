@@ -1,5 +1,10 @@
 import(methods)
 
+importFrom("grDevices", "colorRampPalette", "rainbow", "x11")
+importFrom("graphics", "abline", "box", "image", "legend", "lines", "mtext", "par", "plot", "points")
+importFrom("stats", "approx", "density", "lowess", "median", "sd")
+importFrom("utils", "data", "read.table", "write.table")
+
 importFrom(BiocGenerics, "annotation", "annotation<-", "normalize")
 importFrom(annotate, "lookUp", "htmlpage")
 importFrom(Biobase, 
