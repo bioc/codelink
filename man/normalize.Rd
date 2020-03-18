@@ -19,7 +19,6 @@
 }
 \arguments{
   \item{object}{an object of class CodelinkSet or Codelink.}
-  \item{...}{further arguments passed to the normalization functions.}
   \item{method}{method to use in normalization.}
   \item{log.it}{logical; if data should be log2.}
   \item{preserve}{logical; if Ri slot should be preserved.}
